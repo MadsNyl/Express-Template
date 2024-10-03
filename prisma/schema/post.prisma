@@ -1,0 +1,9 @@
+model Post {
+  id        Int       @id @default(autoincrement())
+  title     String
+  content   String
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [username])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}

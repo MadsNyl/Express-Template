@@ -1,0 +1,1 @@
+# Express Template with TypeScript, Zod validation, Prisma ORM, JWT Authentication and Global Error Handling
