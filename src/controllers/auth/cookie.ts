@@ -6,8 +6,10 @@ import asyncErrorHandler from '../../middleware/errors/errorHandler';
 import { db } from '../../util/db';
 import APIError from '../../middleware/errors/error';
 import { HTTPStatusCode } from '../../enums/http';
-import { accessTokenDuration, accessTokenSecret, refreshTokenCookieName, refreshTokenDuration, refreshTokenSecret } from '../../config/constants';
+import { refreshTokenCookieName, refreshTokenSecret } from '../../config/constants';
 import { DecodedUser, UserRequest } from '../../types/request';
+import { getAccessToken, getRefreshToken } from '../../util/auth';
+import { User } from '@prisma/client';
 
 
 export const loginUserWithCookie = asyncErrorHandler(async (req: Request, res: Response) => {
@@ -35,25 +37,9 @@ export const loginUserWithCookie = asyncErrorHandler(async (req: Request, res: R
         );
     }
 
-    const userInfo: DecodedUser = {
-        userInfo: {
-            username: user.username,
-            email: user.email,
-            role: user.role
-        }
-    };
+    const accessToken = getAccessToken(user);
 
-    const accessToken = jwt.sign(
-        userInfo,
-        accessTokenSecret ?? '',
-        { expiresIn: accessTokenDuration }
-    );
-
-    const refreshToken = jwt.sign(
-        { 'username': user.username },
-        refreshTokenSecret ?? '',
-        { expiresIn: refreshTokenDuration }
-    );
+    const refreshToken = getRefreshToken(user);
 
     await db.user.update({
         where: { username },
@@ -113,19 +99,7 @@ export const refreshToken = asyncErrorHandler(async (req: Request, res: Response
         (error: VerifyErrors | null, decoded: DecodedUser | any) => {
             if (error || user.username !== decoded.username) throw new APIError('Uautorisert', HTTPStatusCode.UNAUTHORIZED_401);
 
-            const userInfo: DecodedUser = {
-                userInfo: {
-                    username: user.username,
-                    email: user.email,
-                    role: user.role
-                }
-            };
-
-            const accessToken = jwt.sign(
-                userInfo,
-                accessTokenSecret || '',
-                { expiresIn: accessTokenDuration }
-            );
+            const accessToken = getAccessToken(user as User);
 
             return res.status(HTTPStatusCode.OK_200).json({accessToken});
         }

@@ -33,13 +33,7 @@ describe('POST /auth/register', () => {
     });
 
     it('should return a 409 status code if user already exists', async () => {
-        const user = await createUser(
-            'test',
-            'test',
-            'test',
-            'test@test.com',
-            'password1234'
-        );
+        const user = await createUser();
 
         const newUser: z.infer<typeof registerUserSchema> = {
             ...user,

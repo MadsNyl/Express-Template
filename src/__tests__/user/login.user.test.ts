@@ -12,13 +12,7 @@ afterEach(async () => await deleteAllUsers());
 
 describe('POST /auth/cookie/login', () => {
     it('should return a 200 status code', async () => {
-        const user = await createUser(
-            'test',
-            'test',
-            'test',
-            'test@test.com',
-            'password1234'
-        );
+        const user = await createUser();
 
         const credentials: z.infer<typeof loginUserSchema> = {
             username: user.username,
@@ -47,13 +41,7 @@ describe('POST /auth/cookie/login', () => {
     });
 
     it('should return a 401 status code if password is incorrect', async () => {
-        const user = await createUser(
-            'test',
-            'test',
-            'test',
-            'test@test.com',
-            'password1234'
-        );
+        const user = await createUser();
 
         const credentials: z.infer<typeof loginUserSchema> = {
             username: user.username,

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createPost, getAllPosts } from '../controllers/post';
+import { createPost, deletePost, getAllPosts } from '../controllers/post';
 import verifyJWT from '../middleware/auth/verifyJWT';
 import verifyRole from '../middleware/auth/verifyRole';
 import { UserRole } from '@prisma/client';
@@ -14,6 +14,9 @@ router.use(verifyJWT, verifyRole(UserRole.USER, UserRole.EDITOR));
 router.route('/')
     .get(getAllPosts)
     .post(validateData(createPostSchema), createPost);
+
+router.route('/:id')
+    .delete(deletePost);
 
 
 export default router;
