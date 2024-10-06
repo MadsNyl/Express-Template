@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import asyncErrorHandler from "../middleware/errors/errorHandler";
-import { db } from "../util/db";
-import { getPaginationData, getSearchQuery, paginate } from "../util/query";
-import { UserRequest } from "../types/request";
+import { Request, Response } from 'express';
+import asyncErrorHandler from '../middleware/errors/errorHandler';
+import { db } from '../util/db';
+import { getPaginationData, getSearchQuery, paginate } from '../util/query';
+import { UserRequest } from '../types/request';
 
 
 export const getAllPosts = asyncErrorHandler(async (req: Request, res: Response) => {
@@ -11,11 +11,11 @@ export const getAllPosts = asyncErrorHandler(async (req: Request, res: Response)
         page
     } = req.query;
 
-    const pageQuery = page as string || "1";
+    const pageQuery = page as string || '1';
 
     const query = {
         where: {
-            ...getSearchQuery(search as string, ["title", "content"])
+            ...getSearchQuery(search as string, ['title', 'content'])
         },
         ...paginate(pageQuery)
     };

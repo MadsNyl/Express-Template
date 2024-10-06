@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express";
-import { z, ZodError } from "zod";
-import APIError from "../middleware/errors/error";
-import { HTTPStatusCode } from "../enums/http";
+import { NextFunction, Request, Response } from 'express';
+import { z, ZodError } from 'zod';
+import APIError from '../middleware/errors/error';
+import { HTTPStatusCode } from '../enums/http';
 
 
 export const validateData = (
@@ -19,12 +19,12 @@ export const validateData = (
                 
                 throw new APIError(
                     errorMessages,
-                    HTTPStatusCode.BAD_REQUEST
+                    HTTPStatusCode.BAD_REQUEST_400
                 )
             } else {
                 throw new APIError(
-                    "Det skjedde en feil på serveren",
-                    HTTPStatusCode.INTERNAL_SERVER_ERROR
+                    'Det skjedde en feil på serveren',
+                    HTTPStatusCode.INTERNAL_SERVER_ERROR_500
                 )
             }
         } 

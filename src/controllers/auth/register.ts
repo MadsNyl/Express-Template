@@ -1,10 +1,10 @@
-import { Request, Response } from "express";
-import bcrypt from "bcrypt";
+import { Request, Response } from 'express';
+import bcrypt from 'bcrypt';
 
-import asyncErrorHandler from "../../middleware/errors/errorHandler";
-import { db } from "../../util/db";
-import APIError from "../../middleware/errors/error";
-import { HTTPStatusCode } from "../../enums/http";
+import asyncErrorHandler from '../../middleware/errors/errorHandler';
+import { db } from '../../util/db';
+import APIError from '../../middleware/errors/error';
+import { HTTPStatusCode } from '../../enums/http';
 
 
 export const registerUser = asyncErrorHandler(async (req: Request, res: Response) => {
@@ -28,8 +28,8 @@ export const registerUser = asyncErrorHandler(async (req: Request, res: Response
 
     if (userExists) {
         throw new APIError(
-            "Brukernavnet er allerede i bruk",
-            HTTPStatusCode.CONFLICT
+            'Brukernavnet er allerede i bruk',
+            HTTPStatusCode.CONFLICT_409
         )
     }
 
@@ -46,6 +46,6 @@ export const registerUser = asyncErrorHandler(async (req: Request, res: Response
     });
 
     return res
-        .status(HTTPStatusCode.CREATED)
+        .status(HTTPStatusCode.CREATED_201)
         .json(user);
 });

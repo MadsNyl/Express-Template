@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 
 const asyncErrorHandler = (fn: any) => (req: Request, res: Response, next: NextFunction) => {

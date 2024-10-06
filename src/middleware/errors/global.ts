@@ -1,5 +1,5 @@
-import { NextFunction, Request, Response } from "express";
-import { APIErrorType } from "./error";
+import { Request, Response } from 'express';
+import { APIErrorType } from './error';
 
 
 const productionError = (err: APIErrorType, res: Response) => {
@@ -25,7 +25,7 @@ const developmentError = (err: APIErrorType, res: Response) => {
     });
 };
 
-const globalErrorHandler = (err: APIErrorType, _req: Request, res: Response, _next: NextFunction) => {
+const globalErrorHandler = (err: APIErrorType, _req: Request, res: Response) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 

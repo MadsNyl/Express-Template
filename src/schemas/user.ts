@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 
 export const registerUserSchema = z.object({
@@ -9,8 +9,8 @@ export const registerUserSchema = z.object({
     password: z.string().min(8),
     rePassword: z.string().min(8),
 }).refine(data => data.password === data.rePassword, {
-    message: "Passordene er ikke like",
-    path: ["rePassword"],
+    message: 'Passordene er ikke like',
+    path: ['rePassword'],
 });
 
 export const loginUserSchema = z.object({

@@ -1,4 +1,4 @@
-import { pageSize } from "../config/constants";
+import { pageSize } from '../config/constants';
 
 
 export const paginate = (query: string) => {

@@ -13,6 +13,18 @@ services:
       - 5432
     ports:
       - '5432:5432'
+
+  test-db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=db
+    expose:
+      - 5433
+    ports:
+      - '5433:5432'
+
 volumes:
   db:
     driver: local
