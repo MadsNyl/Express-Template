@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 
-import { User } from "@prisma/client";
-import { DecodedUser } from "../types/request";
-import { accessTokenDuration, accessTokenSecret, refreshTokenDuration, refreshTokenSecret } from "../config/constants";
+import { User } from '@prisma/client';
+import { DecodedUser } from '../types/request';
+import { accessTokenDuration, accessTokenSecret, refreshTokenDuration, refreshTokenSecret } from '../config/constants';
 
 
 export const getAccessToken = (user: User): string => {

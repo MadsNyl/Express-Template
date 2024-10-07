@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { db } from "../../util/db";
+import { db } from '../../util/db';
 import { UserRole } from '@prisma/client';
 
 

@@ -1,5 +1,5 @@
-import { User } from "@prisma/client";
-import { db } from "../../util/db";
+import { User } from '@prisma/client';
+import { db } from '../../util/db';
 
 
 export const createPost = async (

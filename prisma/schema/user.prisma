@@ -1,15 +1,25 @@
 model User {
-  username  String    @id @unique
-  firstName String
-  lastName  String
-  email     String    @unique
-  token     String?   @unique
-  role      UserRole  @default(USER)
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  image     String?
-  posts     Post[]
+  username       String          @id @unique
+  firstName      String
+  lastName       String
+  email          String          @unique
+  token          String?         @unique
+  role           UserRole        @default(USER)
+  password       String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime?       @updatedAt
+  image          String?
+  posts          Post[]
+  forgotPassword ForgotPassword?
+}
+
+model ForgotPassword {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime @default(dbgenerated("now() + interval '1 day'"))
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [username])
 }
 
 enum UserRole {

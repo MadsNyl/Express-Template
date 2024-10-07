@@ -1,4 +1,4 @@
-import { db } from "../../util/db";
+import { db } from '../../util/db';
 
 
 const disconnectServer = async () => await db.$disconnect();

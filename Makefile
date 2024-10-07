@@ -32,6 +32,7 @@ schema-format:
 .PHONY: format
 format:
 	make schema-format
+	npm run format
 
 .PHONY: test
 test:

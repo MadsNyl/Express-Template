@@ -1,8 +1,8 @@
 import request from 'supertest';
-import { getAccessToken } from "../../util/auth";
-import disconnectServer from "../util/afterAll";
-import { createPost } from "../util/post";
-import { createUser, deleteAllUsers } from "../util/user";
+import { getAccessToken } from '../../util/auth';
+import disconnectServer from '../util/afterAll';
+import { createPost } from '../util/post';
+import { createUser, deleteAllUsers } from '../util/user';
 import { app } from '../../server';
 import { HTTPStatusCode } from '../../enums/http';
 import { UserRole } from '@prisma/client';
