@@ -10,7 +10,7 @@ export const registerUserSchema = z.object({
     password: z.string().min(8),
     rePassword: z.string().min(8),
 }).refine(data => data.password === data.rePassword, {
-    message: 'Passordene er ikke like',
+    message: 'The passwords are not the same',
     path: ['rePassword'],
 });
 
@@ -25,4 +25,13 @@ export const updateUserRoleSchema = z.object({
 
 export const forgotPasswordSchema = z.object({
     email: z.string().email(),
+});
+
+export const resetPasswordSchema = z.object({
+    password: z.string().min(8),
+    rePassword: z.string().min(8),
+    token: z.string(),
+}).refine(data => data.password === data.rePassword, {
+    message: 'The passwords are not the same',
+    path: ['rePassword'],
 });

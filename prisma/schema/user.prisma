@@ -10,15 +10,15 @@ model User {
   updatedAt      DateTime?       @updatedAt
   image          String?
   posts          Post[]
-  forgotPassword ForgotPassword?
+  forgotPassword ForgotPassword[]
 }
 
 model ForgotPassword {
   id        Int      @id @default(autoincrement())
   token     String   @unique
   createdAt DateTime @default(now())
-  expiresAt DateTime @default(dbgenerated("now() + interval '1 day'"))
-  userId    String   @unique
+  expiresAt DateTime 
+  userId    String   
   user      User     @relation(fields: [userId], references: [username])
 }
 

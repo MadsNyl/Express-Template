@@ -6,6 +6,8 @@ import crypto from 'crypto';
 import { PORT } from '../../config/constants';
 import { sendMail } from '../../util/email';
 import APIError from '../../middleware/errors/error';
+import path from 'path';
+import bcrypt from 'bcrypt';
 
 
 export const forgotPassword = asyncErrorHandler(async (
@@ -33,6 +35,7 @@ export const forgotPassword = asyncErrorHandler(async (
     await db.forgotPassword.create({
         data: {
             token,
+            expiresAt: new Date(Date.now() + 3600000),
             user: {
                 connect: {
                     email
@@ -41,7 +44,7 @@ export const forgotPassword = asyncErrorHandler(async (
         }
     })
 
-    const resetUrl = `http://localhost:${PORT}/reset-password/${token}`;
+    const resetUrl = `http://localhost:${PORT}/auth/reset-password/${token}`;
 
     sendMail(
         email,
@@ -77,9 +80,51 @@ export const getResetPasswordForm = asyncErrorHandler(async (
 
     return res
         .status(HTTPStatusCode.OK_200)
-        .send(
-            '<form method="post" action="/auth/reset-password"><input type="password" name="password" required><input type="submit" value="Reset Password"></form>'
-        );
+        .sendFile(path.join(__dirname, '../../templates/reset-password.html'));
 });
 
-export const resetPassword = asyncErrorHandler(async () => {});
+export const resetPassword = asyncErrorHandler(async (
+    req: Request,
+    res: Response
+) => {
+    const { password, token } = req.body;
+
+    const existingUser = await db.forgotPassword.findUnique({
+        where: {
+            token
+        },
+        select: {
+            user: {
+                select: {
+                    username: true
+                }
+            }
+        }
+    });
+
+    if (!existingUser) {
+        throw new APIError(
+            'Invalid or expired token',
+            HTTPStatusCode.BAD_REQUEST_400
+        );
+    };
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await db.user.update({
+        where: {
+            username: existingUser.user.username
+        },
+        data: {
+            password: hashedPassword
+        }
+    });
+
+    await db.forgotPassword.delete({
+        where: {
+            token
+        }
+    });
+
+    return res.redirect('/');
+});
