@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { APIErrorType } from './error';
 
 
@@ -25,13 +25,18 @@ const developmentError = (err: APIErrorType, res: Response) => {
     });
 };
 
-const globalErrorHandler = (err: APIErrorType, _req: Request, res: Response) => {
+export const globalErrorHandler = (
+    err: APIErrorType,
+    req: Request,
+    res: Response,
+    _next: NextFunction
+  ) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
     if (process.env.NODE_ENV === 'production') productionError(err, res);
     else developmentError(err, res);
-};
+  };
 
 
 export default globalErrorHandler;

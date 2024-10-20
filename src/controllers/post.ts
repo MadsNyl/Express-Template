@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
-import asyncErrorHandler from '../middleware/errors/errorHandler';
 import { db } from '../util/db';
 import { getPaginationData, getSearchQuery, paginate } from '../util/query';
 import { UserRequest } from '../types/request';
 import { HTTPStatusCode } from '../enums/http';
 import { UserRole } from '@prisma/client';
+import APIError from '../middleware/errors/error';
+import asyncHandler from 'express-async-handler';
 
 
-export const getAllPosts = asyncErrorHandler(async (req: Request, res: Response) => {
+export const getAllPosts = asyncHandler(async (req: Request, res: Response) => {
     const {
         search,
         page
@@ -25,13 +26,13 @@ export const getAllPosts = asyncErrorHandler(async (req: Request, res: Response)
     const totalPosts = await db.post.count();
     const posts = await db.post.findMany(query);
     
-    return res.status(HTTPStatusCode.OK_200).json({
+    res.status(HTTPStatusCode.OK_200).json({
         ...getPaginationData(totalPosts, parseInt(pageQuery)),
         data: posts
     });
 });
 
-export const createPost = asyncErrorHandler(async (req: UserRequest, res: Response) => {
+export const createPost = asyncHandler(async (req: UserRequest, res: Response) => {
     const { title, content } = req.body;
     const { username } = req;
 
@@ -47,10 +48,10 @@ export const createPost = asyncErrorHandler(async (req: UserRequest, res: Respon
         }
     });
 
-    return res.status(HTTPStatusCode.CREATED_201).json(post);
+    res.status(HTTPStatusCode.CREATED_201).json(post);
 });
 
-export const deletePost = asyncErrorHandler(async (req: UserRequest, res: Response) => {
+export const deletePost = asyncHandler(async (req: UserRequest, res: Response) => {
     const { id } = req.params;
     const { username, role } = req;
 
@@ -61,11 +62,13 @@ export const deletePost = asyncErrorHandler(async (req: UserRequest, res: Respon
     });
 
     if (!post) {
-        return res.status(HTTPStatusCode.BAD_REQUEST_400).json({ message: 'Post not found' });
+        res.status(HTTPStatusCode.BAD_REQUEST_400).json({ message: 'Post not found' });
+        return;
     }
 
     if (post.authorId !== username && role !== UserRole.ADMIN) {
-        return res.status(HTTPStatusCode.FORBIDDEN_403).json({ message: 'Unauthorized' });
+        res.status(HTTPStatusCode.FORBIDDEN_403).json({ message: 'Unauthorized' });
+        return;
     }
 
     await db.post.delete({
@@ -74,5 +77,5 @@ export const deletePost = asyncErrorHandler(async (req: UserRequest, res: Respon
         }
     });
 
-    return res.status(HTTPStatusCode.NO_CONTENT_204).json();
+    res.status(HTTPStatusCode.NO_CONTENT_204).json();
 });

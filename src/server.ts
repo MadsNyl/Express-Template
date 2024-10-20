@@ -19,7 +19,8 @@ app.use(cookieParser());
 
 createRoutes(app);
 
-app.use(globalErrorHandler);
+// @ts-ignore
+app.use(globalErrorHandler); 
 
 
 if (NODE_ENV !== 'test') {
