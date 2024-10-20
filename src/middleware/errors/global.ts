@@ -30,13 +30,13 @@ export const globalErrorHandler = (
     req: Request,
     res: Response,
     _next: NextFunction
-  ) => {
+) => {
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error';
 
     if (process.env.NODE_ENV === 'production') productionError(err, res);
     else developmentError(err, res);
-  };
+};
 
 
 export default globalErrorHandler;

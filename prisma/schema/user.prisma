@@ -1,13 +1,13 @@
 model User {
-  username       String          @id @unique
+  username       String           @id @unique
   firstName      String
   lastName       String
-  email          String          @unique
-  token          String?         @unique
-  role           UserRole        @default(USER)
+  email          String           @unique
+  token          String?          @unique
+  role           UserRole         @default(USER)
   password       String
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime?       @updatedAt
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime?        @updatedAt
   image          String?
   posts          Post[]
   forgotPassword ForgotPassword[]
@@ -17,8 +17,8 @@ model ForgotPassword {
   id        Int      @id @default(autoincrement())
   token     String   @unique
   createdAt DateTime @default(now())
-  expiresAt DateTime 
-  userId    String   
+  expiresAt DateTime
+  userId    String
   user      User     @relation(fields: [userId], references: [username])
 }
 
